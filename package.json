@@ -9,7 +9,10 @@
     "deploy": "node scripts/deploy-gh-pages.js"
   },
   "dependencies": {
+    "autoprefixer": "^9",
     "core-js": "^3.6.5",
+    "postcss": "^7",
+    "tailwindcss": "^2.0.1-compat",
     "vue": "^3.0.0"
   },
   "devDependencies": {
