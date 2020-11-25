@@ -1,43 +1,65 @@
 <template>
-  <div class="mx-12 mt-4">
-    <p>
-      Sometimes short is all we need or can have.
-      A short image or small sentence can stop suicide
-      <br>
-      We all are smart and creative, we just need that one spark and creativity
-      <br><br>
-      Sometimes we don’t need to know how to do something. We just need to know what to do and why to do it.
-    </p>
-  </div>
-  <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>
 
-  <p v-if="editing" class="mx-64 text-red-500">After editing done press enter</p>
-  <div class="my-2 mx-64 editor shadow px-10 py-5" ref="editor" @blur.prevent="editEnd"
-       @keydown.enter.prevent="endEdit"
-       v-html="motive">
-  </div>
+  <div class="w-full">
 
-  <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>
+    <div class="">
+      <p class="text-white md:py-2 md:px-24 py-1 px-1 hidden">
+        Sometimes short is all we need or can have.
+        A short image or small sentence can stop suicide
+        We all are smart and creative, we just need that one spark and creativity
+        <br>
+        Sometimes we don’t need to know how to do something. We just need to know what to do and why to do it.
+      </p>
 
-  <div class="flex justify-center">
-    <button @click="toggle" class="rounded-lg py-1 px-2 bg-red-500 shadow text-white hover:bg-red-600 text-center">
-      {{ editing ? "Done" : "Edit" }}
-    </button>
-    <button @click="drawText"
-            class="ml-2 rounded-lg py-1 px-2 bg-green-500 shadow text-white hover:bg-green-600 text-center">Download
-    </button>
-  </div>
+      <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
 
-  <div class="flex justify-center my-2">
-    <div ref="output" class="flex-none flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
-      <div class="flex items-center justify-center">
-        <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-        <h3 class="text-md font-medium text-gray-800 ml-3">@{{ user.displayName ?? 'Shejadul Karim' }}</h3>
+      <p v-if="editing" class="md:mx-24 text-red-500 mx-2">After editing done press enter</p>
+
+      <div class="md:my-2 md:mx-24 my-4 mx-2 text-xl editor shadow md:px-12 md:py-6 px-3 py-4 text-white leading-loose"
+           ref="editor"
+           @blur.prevent="editEnd"
+           @keydown.enter.prevent="endEdit"
+           v-html="motive">
       </div>
-      <div class="flex-none my-3 text-center">
-        <blockquote class="text-md text-justify font-semibold">{{ stripedhtml }}</blockquote>
+
+      <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
+
+      <div class="flex justify-center mt-3">
+        <button @click="toggle"
+                class=" flex rounded-full py-1 px-5 justify-between items-center bg-red-500 shadow text-white hover:bg-red-600 text-center">
+        <span v-if="!editing" class="flex-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+        </span>
+          <span v-else class="flex-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </span>
+          <span class="text-lg font-semibold ml-2">{{ editing ? "Done" : "Edit" }}</span>
+        </button>
+
+        <button @click="drawText"
+                class="ml-2 rounded-full py-1 px-4 bg-green-500 shadow text-white hover:bg-green-600 text-center">
+          Download
+        </button>
       </div>
     </div>
+
+    <div class="mt-4 w-full overflow-x-auto md:flex md:justify-center">
+
+      <div ref="output" class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
+        <div class="flex items-center justify-center">
+          <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
+          <h3 class="text-md font-medium text-gray-800 ml-3">@{{ user.displayName ?? 'Shejadul Karim' }}</h3>
+        </div>
+        <div class="flex-none my-3 text-center">
+          <blockquote class="text-md text-justify font-semibold">{{ stripedhtml }}</blockquote>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
 </template>
@@ -75,7 +97,7 @@ export default {
   },
   methods: {
     editEnd() {
-      this.toggle()
+      this.motive = this.$refs['editor'].innerHTML
     },
     endEdit() {
       this.toggle()
@@ -84,10 +106,11 @@ export default {
 
     drawText() {
       var _this = this
-      htmlToImage.toPng(this.$refs['output'])
-          .then(function (dataUrl) {
-            _this.download(dataUrl)
-          })
+      htmlToImage.toPng(this.$refs['output'], {
+        pixelRatio: 1
+      }).then(function (dataUrl) {
+        _this.download(dataUrl)
+      })
           .catch(function (error) {
             console.error('oops, something went wrong!', error);
           });
@@ -120,16 +143,20 @@ export default {
     },
     toggle() {
       this.editing = !this.editing
+      var this_ = this;
       this.$refs["editor"].querySelectorAll("b").forEach(node => {
         node.contentEditable = this.editing
         if (this.editing) {
-          node.classList.add("bg-gray-300")
+          node.classList.add("bg-transparent")
           node.classList.add("text-gray-800")
           node.classList.add("px-2")
           node.classList.add("py-1")
           node.classList.add("rounded")
+          node.classList.add("border-b")
+          node.classList.add("border-gray-300")
         } else {
           node.className = ' '
+          this_.editEnd()
         }
       })
     }

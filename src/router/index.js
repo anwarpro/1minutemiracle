@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 
 const routes = [
@@ -14,11 +14,17 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/GenerateLink.vue')
+    },
+    {
+        path: '/:catchAll(.*)',
+        name: 'NotFound',
+        component: () => import('../views/NotFound')
     }
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    mode: 'history',
+    history: createWebHistory(),
     routes
 })
 

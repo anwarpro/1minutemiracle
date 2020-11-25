@@ -1,9 +1,11 @@
 <template>
-  <div class="mx-12 my-8">
-    <textarea class="w-full h-24 px-4 py-2 border border-gray-300" v-model="text"></textarea>
-    <p class="my-2 flex">
-      <input v-model="encoded" ref="link" type="text" readonly class="flex-1"/>
-      <span class="bg-gray-500 text-white ml-2 cursor-pointer px-2 pt-2 pb-1 rounded uppercase"
+  <div class="mx-12 my-8 w-full px-2 py-2">
+    <textarea class="w-full h-24 px-4 py-2 border border-gray-300 bg-transparent text-white rounded-xl"
+              v-model="text"></textarea>
+    <p class="my-2 flex md:flex-row flex-col">
+      <input v-model="encoded" ref="link" type="text" readonly class="flex-1 rounded-lg px-4 bg-gray-300"/>
+
+      <span class="self-end mt-1 bg-gray-500 text-white w-16 md:ml-2 cursor-pointer px-2 pt-1 pb-1 rounded-lg uppercase"
             @click="copy">{{ status }}</span>
     </p>
   </div>
@@ -34,7 +36,7 @@ export default {
     encoded() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.status = 'Copy';
-      return window.location.origin + "/#/?motive=" + encodeURI(this.text)
+      return window.location.origin + "?motive=" + encodeURI(this.text)
     }
   }
 }
