@@ -33,9 +33,9 @@
         <!--        navigation-->
         <div class="md:mt-0 mt-1">
           <nav class="text-white flex justify-center items-center">
-            <router-link to="/">Home</router-link>
-            <router-link to="/" class="mx-2" v-if="user" @click.prevent="logout">Logout</router-link>
-            <router-link to="/generate"
+            <router-link to="/" class="mr-2 border-b">Home</router-link>
+            <router-link to="/" class="mr-2 border-b" v-if="user" @click.prevent="logout">| Logout</router-link>
+            <router-link v-if="user && user.uid === 'R99I4CoDqfdMCuqEV6AGia9SHM73'" to="/generate"
                          class="md:ml-4 md:text-md text-sm bg-gray-100 inline-block px-2 py-1 rounded-full text-purple-500">
               Generate Link
             </router-link>
@@ -43,12 +43,8 @@
         </div>
       </header>
       <section class="flex justify-center flex-1">
-        <modal v-if="!user">
-          <template v-slot:body>
-            <login></login>
-          </template>
-        </modal>
-        <router-view></router-view>
+        <login v-if="!user"></login>
+        <router-view v-else></router-view>
       </section>
     </main>
   </div>
@@ -58,18 +54,18 @@
 
 import {auth} from "@/firebase";
 import {mapGetters} from "vuex";
-import Modal from "@/components/Modal";
 import Login from "@/components/Login";
 
 export default {
   name: 'App',
-  components: {Login, Modal},
+  components: {Login},
   created() {
 
   },
   computed: {
     ...mapGetters({
-      user: 'user'
+      user: 'user',
+      fireUser: 'fireUser'
     })
   },
   methods: {

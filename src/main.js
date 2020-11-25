@@ -11,6 +11,7 @@ let app
 auth.onAuthStateChanged(user => {
     if (user) {
         store.dispatch('fetchUser', user)
+        store.dispatch('getUser', user)
     }
 
     if (!app) {
@@ -19,7 +20,6 @@ auth.onAuthStateChanged(user => {
             .use(router)
             .mount('#app')
     }
-    console.log('app', user)
 })
 
 

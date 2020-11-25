@@ -3,13 +3,7 @@
   <div class="w-full">
 
     <div class="">
-      <p class="text-white md:py-2 md:px-24 py-1 px-1 hidden">
-        Sometimes short is all we need or can have.
-        A short image or small sentence can stop suicide
-        We all are smart and creative, we just need that one spark and creativity
-        <br>
-        Sometimes we don’t need to know how to do something. We just need to know what to do and why to do it.
-      </p>
+      <!--      <h3 v-if="user" class="mr-1 text-lg text-white mx-2 md:mx-24">Hi, {{ user.displayName ? user.displayName.split(' ')[0] : 'Guest' }}</h3>-->
 
       <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
 
@@ -51,7 +45,7 @@
       <div ref="output" class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
         <div class="flex items-center justify-center">
           <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-          <h3 class="text-md font-medium text-gray-800 ml-3">@{{ user.displayName ?? 'Shejadul Karim' }}</h3>
+          <h3 class="text-md font-medium text-gray-800 ml-3">@{{ fireUser.name ?? 'Shejadul Karim' }}</h3>
         </div>
         <div class="flex-none my-3 text-center">
           <blockquote class="text-md text-justify font-semibold">{{ stripedhtml }}</blockquote>
@@ -82,7 +76,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'user'
+      user: 'user',
+      fireUser: 'fireUser'
     }),
     stripedhtml() {
       let regex = /(<([^>]+)>)/ig;
