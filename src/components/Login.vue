@@ -54,7 +54,7 @@
     <div class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 mt-6 rounded-lg">
       <div class="flex items-center justify-center">
         <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-        <h3 class="text-md font-medium text-gray-800 ml-3">@{{ fireUser.name ?? 'Shejadul Karim' }}</h3>
+        <h3 class="text-md font-medium text-gray-800 ml-3">@Shejadul Karim</h3>
       </div>
       <div class="flex-none my-3 text-center">
         <blockquote class="text-md text-justify font-semibold" v-html="motive"></blockquote>
