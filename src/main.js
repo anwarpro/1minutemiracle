@@ -3,5 +3,23 @@ import App from './App.vue'
 
 import '@/assets/css/tailwind.css'
 import router from './router'
+import store from './store'
+import {auth} from "@/firebase";
 
-createApp(App).use(router).mount('#app')
+let app
+
+auth.onAuthStateChanged(user => {
+    if (user) {
+        store.dispatch('fetchUser', user)
+    }
+
+    if (!app) {
+        app = createApp(App)
+            .use(store)
+            .use(router)
+            .mount('#app')
+    }
+    console.log('app', user)
+})
+
+

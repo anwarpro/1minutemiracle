@@ -32,7 +32,7 @@
     <div ref="output" class="flex-none flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
       <div class="flex items-center justify-center">
         <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-        <h3 class="text-md font-medium text-gray-800 ml-3">@Shejadul Karim</h3>
+        <h3 class="text-md font-medium text-gray-800 ml-3">@{{ user.displayName ?? 'Shejadul Karim' }}</h3>
       </div>
       <div class="flex-none my-3 text-center">
         <blockquote class="text-md text-justify font-semibold">{{ stripedhtml }}</blockquote>
@@ -47,6 +47,7 @@
 // import canvasTxt from 'canvas-txt'
 
 import * as htmlToImage from 'html-to-image';
+import {mapGetters} from "vuex";
 
 export default {
   name: 'Miracle',
@@ -58,6 +59,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      user: 'user'
+    }),
     stripedhtml() {
       let regex = /(<([^>]+)>)/ig;
       return this.motive.replaceAll(regex, "")
