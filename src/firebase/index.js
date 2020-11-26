@@ -20,11 +20,13 @@ const auth = firebase.auth()
 const firestore = firebase.firestore()
 
 const usersCollection = firestore.collection('users')
+const miraclesCollection = firestore.collection('miracles')
 const googleProvider = new firebase.auth.GoogleAuthProvider()
 
 export {
     auth,
     googleProvider,
     firestore,
-    usersCollection
+    usersCollection,
+    miraclesCollection
 }

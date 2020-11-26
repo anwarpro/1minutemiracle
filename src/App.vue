@@ -35,7 +35,7 @@
           <nav class="text-white flex justify-center items-center">
             <router-link to="/" class="mr-2 border-b">Home</router-link>
             <router-link to="/" class="mr-2 border-b" v-if="user" @click.prevent="logout">| Logout</router-link>
-            <router-link v-if="user && user.uid === 'R99I4CoDqfdMCuqEV6AGia9SHM73'" to="/generate"
+            <router-link to="/generate"
                          class="md:ml-4 md:text-md text-sm bg-gray-100 inline-block px-2 py-1 rounded-full text-purple-500">
               Generate Link
             </router-link>

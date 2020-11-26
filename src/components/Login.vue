@@ -142,6 +142,7 @@ export default {
             })
       } else {
         this.type = 'guest';
+        this.error = 'Name field required'
       }
     },
     signInWithGoogle() {

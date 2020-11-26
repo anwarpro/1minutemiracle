@@ -45,7 +45,10 @@
       <div ref="output" class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
         <div class="flex items-center justify-center">
           <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-          <h3 class="text-md font-medium text-gray-800 ml-3">@{{ fireUser.name ?? 'Shejadul Karim' }}</h3>
+          <h3 class="text-md font-medium text-gray-800 ml-3" v-if="fireUser">@{{
+              fireUser.name ?? 'Shejadul Karim'
+            }}</h3>
+          <h3 class="text-md font-medium text-gray-800 ml-3" v-else>@Shejadul Karim</h3>
         </div>
         <div class="flex-none my-3 text-center">
           <blockquote class="text-md text-justify font-semibold">{{ stripedhtml }}</blockquote>
@@ -64,6 +67,7 @@
 
 import * as htmlToImage from 'html-to-image';
 import {mapGetters} from "vuex";
+import {miraclesCollection} from "@/firebase";
 
 export default {
   name: 'Miracle',
@@ -84,13 +88,18 @@ export default {
       return this.motive.replaceAll(regex, "")
     }
   },
-  mounted() {
+  created() {
     if (this.$route.query.motive && !this.$route.query.motive.toString.length) {
-      this.original = this.$route.query.motive
-      this.motive = this.$route.query.motive
+      this.getMotive(this.$route.query.motive);
     }
   },
   methods: {
+    async getMotive(id) {
+      let mot = await miraclesCollection.doc(this.user.uid).collection('posts').doc(id).get()
+      if (mot.data().motive) {
+        this.motive = mot.data().motive
+      }
+    },
     editEnd() {
       this.motive = this.$refs['editor'].innerHTML
     },
@@ -98,7 +107,6 @@ export default {
       this.toggle()
       this.motive = this.$refs['editor'].innerHTML
     },
-
     drawText() {
       var _this = this
       htmlToImage.toPng(this.$refs['output'], {
