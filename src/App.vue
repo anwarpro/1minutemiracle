@@ -16,7 +16,7 @@
         <!--        logo-->
         <div class="flex md:justify-around justify-center items-center">
           <div class="text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                  xmlns="http://www.w3.org/2000/svg">
               <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
               <path
@@ -26,16 +26,17 @@
             </svg>
           </div>
           <div class="ml-1">
-            <h3 class="text-lg font-semibold text-white">1Minute Miracle</h3>
+            <h3 class="text-2xl font-semibold text-white">1 Minute Miracle</h3>
           </div>
         </div>
 
         <!--        navigation-->
         <div class="md:mt-0 mt-1">
           <nav class="text-white flex justify-center items-center">
-            <router-link to="/" class="mr-2 border-b">Home</router-link>
-            <router-link to="/" class="mr-2 border-b" v-if="user" @click.prevent="logout">| Logout</router-link>
-            <router-link to="/generate"
+            <router-link to="/" class="mr-2 border-b font-bold">Home</router-link>
+            <span v-if="user" class="mr-2">|</span>
+            <router-link to="/" class="mr-2 border-b font-bold" v-if="user" @click.prevent="logout">Logout</router-link>
+            <router-link v-if="fireUser && fireUser.type === 'admin'" to="/generate"
                          class="md:ml-4 md:text-md text-sm bg-gray-100 inline-block px-2 py-1 rounded-full text-purple-500">
               Generate Link
             </router-link>

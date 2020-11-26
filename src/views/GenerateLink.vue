@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-12 my-8 w-full px-2 py-2">
+  <div class="md:mx-12 md:my-8 mx-2 my-6 w-full px-2 py-2">
     <textarea class="w-full h-24 px-4 py-2 border border-gray-300 bg-transparent text-white rounded-xl"
               v-model="text"></textarea>
 

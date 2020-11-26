@@ -7,13 +7,14 @@
 
       <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
 
-      <p v-if="editing" class="md:mx-24 text-red-500 mx-2">After editing done press enter</p>
+      <p v-if="editing" class="md:mx-24 text-red-400 font-bold mx-2">After editing done press enter</p>
 
-      <div class="md:my-2 md:mx-24 my-4 mx-2 text-xl editor shadow md:px-12 md:py-6 px-3 py-4 text-white leading-loose"
-           ref="editor"
-           @blur.prevent="editEnd"
-           @keydown.enter.prevent="endEdit"
-           v-html="motive">
+      <div
+          class="md:my-2 md:mx-24 my-4 mx-2 text-xl editor shadow-lg md:px-12 md:py-6 px-3 py-4 text-white leading-loose"
+          ref="editor"
+          @blur.prevent="editEnd"
+          @keydown.enter.prevent="endEdit"
+          v-html="motive">
       </div>
 
       <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
@@ -120,7 +121,7 @@ export default {
     },
 
     download(data) {
-      var filename = "motivational.png"
+      var filename = this.fireUser.name + '_' + Math.floor(Math.random() * 100) + '.png';
       /// create an "off-screen" anchor tag
       var lnk = document.createElement('a'), e;
 
@@ -151,7 +152,7 @@ export default {
         node.contentEditable = this.editing
         if (this.editing) {
           node.classList.add("bg-transparent")
-          node.classList.add("text-gray-800")
+          node.classList.add("text-white")
           node.classList.add("px-2")
           node.classList.add("py-1")
           node.classList.add("rounded")
