@@ -14,17 +14,80 @@
       <input type="email" placeholder="Email"
              class="my-2 bg-gray-600 px-2 py-1  rounded-lg text-white inline-block h-10" v-model="email">
       <input type="password" placeholder="Password"
-             class="bg-gray-600 px-2 py-1  rounded-lg text-white inline-block h-10" v-model="password">
+             class="bg-gray-600 px-2 py-1  rounded-lg mb-2 text-white inline-block h-10" v-model="password">
+      <div class="flex">
+        <div class="mr-2 relative">
+          <input type="text" placeholder="Face link https://"
+                 class="bg-gray-600 px-2 py-1  rounded-lg text-white inline-block w-full h-10" v-model="faceLink">
+
+          <a href="#" @click.prevent="selectFile"
+             class=" bg-yellow-500 text-white px-2 py-2 rounded-r-lg absolute right-0 top-0 bottom-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+          </a>
+
+          <input type="file" hidden @change="onFileSelect" ref="faceup" accept="image/*">
+
+        </div>
+
+        <div class="h-10 w-10" v-if="uploading">
+          <h3 class="relative">
+            <span
+                class="w-10 h-10 rounded-full absolute border-4 inline-block text-yellow-500 font-bold text-xs flex justify-center items-center">
+              <span>{{ progress }}%</span>
+            </span>
+            <span class="w-10 h-10 rounded-full absolute border-r-4 border-red-500 inline-block animate-spin"></span>
+          </h3>
+        </div>
+        <img v-else :src="faceLinkUp" alt="!!"
+             class=" text-red-400 text-center align-middle h-10 w-10 rounded-full border border-gray-300">
+
+      </div>
     </div>
 
-    <div v-else class="mb-2">
+    <div v-else class="mb-2 flex flex-col">
       <!--        guest-->
       <input type="text" placeholder="Your name"
-             class="bg-gray-600 px-2 py-1  rounded-lg text-white inline-block w-full h-10" v-model="userName">
+             class="mb-2 bg-gray-600 px-2 py-1  rounded-lg text-white inline-block w-full h-10" v-model="userName">
+
+      <div class="flex">
+        <div class="mr-2 relative">
+          <input type="text" placeholder="Face link https://"
+                 class="bg-gray-600 px-2 py-1  rounded-lg text-white inline-block w-full h-10" v-model="faceLink">
+
+          <a href="#" @click.prevent="selectFile"
+             class=" bg-yellow-500 text-white px-2 py-2 rounded-r-lg absolute right-0 top-0 bottom-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+          </a>
+
+          <input type="file" hidden @change="onFileSelect" ref="faceup" accept="image/*">
+
+        </div>
+
+        <div class="h-10 w-10" v-if="uploading">
+          <h3 class="relative">
+            <span
+                class="w-10 h-10 rounded-full absolute border-4 inline-block text-yellow-500 font-bold text-xs flex justify-center items-center">
+              <span>{{ progress }}%</span>
+            </span>
+            <span class="w-10 h-10 rounded-full absolute border-r-4 border-red-500 inline-block animate-spin"></span>
+          </h3>
+        </div>
+        <img v-else :src="faceLinkUp" alt="!!"
+             class=" text-red-400 text-center align-middle h-10 w-10 rounded-full border border-gray-300">
+
+      </div>
+
     </div>
 
     <p class="text-red-500">{{ error }}</p>
-
 
     <div class="text-white flex justify-between mt-4">
       <button class="bg-blue-500 rounded-lg text-white px-2 py-1 mb-2" @click.prevent="guestSignIn">Start as guest
@@ -51,10 +114,10 @@
             </button>-->
     </div>
 
-    <div class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 mt-6 rounded-lg">
+    <div class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 mt-6 rounded-lg text-gray-500">
       <div class="flex items-center justify-center">
-        <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-        <h3 class="text-md font-medium text-gray-800 ml-3">@Shejadul Karim</h3>
+        <img src="../assets/img/pic.png" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
+        <h3 class="text-md font-medium ml-3">Shejadul Karim</h3>
       </div>
       <div class="flex-none my-3 text-center">
         <blockquote class="text-md text-justify font-semibold" v-html="motive"></blockquote>
@@ -65,7 +128,8 @@
 </template>
 
 <script>
-import {auth, googleProvider, usersCollection} from "@/firebase";
+import {auth, googleProvider, usersCollection, usersStorage} from "@/firebase";
+import {v4 as uuidv4} from 'uuid'
 
 export default {
   name: "Login",
@@ -77,21 +141,62 @@ export default {
       password: '',
       type: 'guest',
       error: '',
-      motive: "Confidence is <b>kicking</b> your <b>special one</b> without <b>any fear of losing her</b>."
+      motive: "You're super <b>awesome</b>",
+      face: '',
+      faceLink: '',
+      mime_type: '',
+      cropedImage: '',
+      autoCrop: false,
+      selectedFile: '',
+      image: '',
+      dialog: false,
+      files: '',
+      uploadTask: '',
+      uploading: false,
+      progress: 0
     }
   },
   computed: {
     stripedhtml() {
       let regex = /(<([^>]+)>)/ig;
       return this.motive.replaceAll(regex, "")
+    },
+    faceLinkUp() {
+      console.log("changed", this.faceLink)
+      return this.faceLink !== '' ? this.faceLink : '/img/pic.78e96f0b.png'
     }
   },
-  mounted() {
+  created() {
     if (this.$route.query.motive && !this.$route.query.motive.toString.length) {
       this.motive = this.$route.query.motive
     }
+    // this.getFace()
+  },
+
+  watch: {
+    uploadTask: function () {
+      var _this = this
+      this.uploadTask.on('state_changed', sp => {
+            _this.progress = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
+          },
+          null,
+          () => {
+            this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+              _this.faceLink = downloadURL
+              _this.uploading = false
+            })
+          })
+    }
   },
   methods: {
+    uploadFile(file) {
+      this.uploading = true
+      let fileName = uuidv4() + '.' + file.name.split('.').pop();
+      this.uploadTask = usersStorage.child(fileName).put(file)
+    },
+    selectFile() {
+      this.$refs['faceup'].click()
+    },
     signIn() {
 
       if (this.type !== 'signin') {
@@ -122,7 +227,7 @@ export default {
       if (this.userName !== '' && this.email !== '' && this.password !== '') {
         auth.createUserWithEmailAndPassword(this.email, this.password)
             .then(user => {
-              this.setUserName(user.user, this.userName)
+              this.setUserName(user.user, this.userName, this.faceLink)
             })
             .catch(err => {
               console.log(err)
@@ -135,7 +240,7 @@ export default {
       if (this.userName !== '') {
         auth.signInAnonymously()
             .then(data => {
-              this.setUserName(data.user, this.userName)
+              this.setUserName(data.user, this.userName, this.faceLink)
             })
             .catch(err => {
               console.log(err)
@@ -148,26 +253,40 @@ export default {
     signInWithGoogle() {
       auth.signInWithPopup(googleProvider)
           .then(data => {
-            let name = data.displayName
-            this.setUserName(data.user, name)
+            let name = data.user.displayName
+            let pic = data.user.photoURL
+            this.setUserName(data.user, name, pic)
           })
           .catch(err => {
             console.log(err)
           })
     },
-    async setUserName(user, name) {
+    async setUserName(user, name, faceLink) {
 
       console.log('setUser', user)
 
       // create user profile object in userCollections
       await usersCollection.doc(user.uid).set({
-        name: name
+        name: name,
+        face: faceLink
       })
 
       this.$store.dispatch('fetchUser', user)
       this.$store.dispatch('getUser', user)
 
-    }
+    },
+    onFileSelect(e) {
+      const file = e.target.files[0]
+      this.uploadFile(file)
+    },
+    saveImage() {
+      this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL()
+      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        const formData = new FormData()
+        formData.append('profile_photo', blob, 'name.jpeg')
+
+      }, this.mime_type)
+    },
   }
 }
 </script>

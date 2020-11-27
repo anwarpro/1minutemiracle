@@ -1,6 +1,7 @@
 import {firebase} from "@firebase/app";
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,6 +25,8 @@ const miraclesCollection = firestore.collection('miracles')
 const postCollection = firestore.collectionGroup('posts')
 const googleProvider = new firebase.auth.GoogleAuthProvider()
 const fieldPath = firebase.firestore.FieldPath
+const storage = firebase.storage()
+const usersStorage = storage.ref('users/')
 
 export {
     auth,
@@ -32,5 +35,7 @@ export {
     usersCollection,
     miraclesCollection,
     postCollection,
-    fieldPath
+    fieldPath,
+    storage,
+    usersStorage
 }

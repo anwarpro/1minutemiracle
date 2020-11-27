@@ -45,7 +45,7 @@
 
       <div ref="output" class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
         <div class="flex items-center justify-center">
-          <img src="../assets/img/pic.jpg" alt="Profile pic" class="w-12 h-12 rounded-full"/>
+          <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full"/>
           <h3 class="text-md font-medium text-gray-800 ml-3" v-if="fireUser">@{{
               fireUser.name ?? 'Shejadul Karim'
             }}</h3>
@@ -75,8 +75,9 @@ export default {
   data() {
     return {
       editing: false,
-      original: "Confidence is <b>kicking</b> your <b>special one</b> without <b>any fear of losing her</b>.",
-      motive: "Confidence is <b>kicking</b> your <b>special one</b> without <b>any fear of losing her</b>."
+      original: "You're super <b>awesome</b>",
+      motive: "You're super <b>awesome</b>",
+      face: '',
     }
   },
   computed: {
@@ -87,6 +88,14 @@ export default {
     stripedhtml() {
       let regex = /(<([^>]+)>)/ig;
       return this.motive.replaceAll(regex, "")
+    },
+    gFace() {
+      return this.face !== '' ? this.face : '/img/pic.78e96f0b.png'
+    }
+  },
+  watch: {
+    fireUser() {
+      this.getFace(this.fireUser.face)
     }
   },
   created() {
@@ -147,6 +156,23 @@ export default {
       } else if (lnk.fireEvent) {
         lnk.fireEvent("onclick");
       }
+    },
+    getFace() {
+      const toDataURL = url => fetch(url)
+          .then(response => response.blob())
+          .then(blob => new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+          }))
+
+
+      toDataURL('https://firebasestorage.googleapis.com/v0/b/minmiracle-ebc7d.appspot.com/o/users%2Ff4678bc2-89e3-4aaa-bf73-3d1c424e94a3.jpg?alt=media&token=5b798118-6c3d-43a9-b21b-0acdcc6f2144')
+          .then(dataUrl => {
+            this.face = dataUrl
+            console.log('data', dataUrl)
+          })
     },
     toggle() {
       this.editing = !this.editing
