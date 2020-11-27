@@ -34,11 +34,17 @@
         <div class="md:mt-0 mt-1">
           <nav class="text-white flex justify-center items-center">
             <router-link to="/" class="mr-2 border-b font-bold">Home</router-link>
+
+            <span v-if="fireUser && fireUser.type === 'admin'" class="mr-2">|</span>
+            <router-link v-if="fireUser && fireUser.type === 'admin'" to="/my-miracles" class="mr-2 border-b font-bold">
+              Miracles
+            </router-link>
+
             <span v-if="user" class="mr-2">|</span>
             <router-link to="/" class="mr-2 border-b font-bold" v-if="user" @click.prevent="logout">Logout</router-link>
             <router-link v-if="fireUser && fireUser.type === 'admin'" to="/generate"
                          class="md:ml-4 md:text-md text-sm bg-gray-100 inline-block px-2 py-1 rounded-full text-purple-500">
-              Generate Link
+              Generate
             </router-link>
           </nav>
         </div>

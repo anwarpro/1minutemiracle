@@ -48,16 +48,17 @@ export default {
     },
     save() {
       if (this.text.trim() !== '') {
-        const docRef = miraclesCollection.doc(this.user.uid)
-            .collection('posts')
+        const docRef = miraclesCollection.doc(this.user.uid).collection('posts')
         if (this.miracle) {
           docRef.doc(this.miracle.id)
-              .set({motive: this.text})
+              .set({motive: this.text, post_id: this.miracle.id}, {merge: true})
         } else {
           docRef.add({
             motive: this.text.trim()
           }).then(data => {
             this.miracle = data
+            //update post id
+            docRef.doc(this.miracle.id).update({post_id: this.miracle.id})
           }).catch(err => {
             console.log(err)
           })

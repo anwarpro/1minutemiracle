@@ -21,12 +21,16 @@ const firestore = firebase.firestore()
 
 const usersCollection = firestore.collection('users')
 const miraclesCollection = firestore.collection('miracles')
+const postCollection = firestore.collectionGroup('posts')
 const googleProvider = new firebase.auth.GoogleAuthProvider()
+const fieldPath = firebase.firestore.FieldPath
 
 export {
     auth,
     googleProvider,
     firestore,
     usersCollection,
-    miraclesCollection
+    miraclesCollection,
+    postCollection,
+    fieldPath
 }

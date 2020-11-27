@@ -68,7 +68,7 @@
 
 import * as htmlToImage from 'html-to-image';
 import {mapGetters} from "vuex";
-import {miraclesCollection} from "@/firebase";
+import {postCollection} from "@/firebase";
 
 export default {
   name: 'Miracle',
@@ -96,9 +96,12 @@ export default {
   },
   methods: {
     async getMotive(id) {
-      let mot = await miraclesCollection.doc(this.user.uid).collection('posts').doc(id).get()
-      if (mot.data().motive) {
-        this.motive = mot.data().motive
+      let mot = await postCollection.where('post_id', '==', id).get();
+      // let mot = await miraclesCollection.doc(this.user.uid).collection('posts').doc(id).get()
+      let miracle = mot.docs.pop()
+      console.log(miracle.data())
+      if (miracle && miracle.data().motive) {
+        this.motive = miracle.data().motive
       }
     },
     editEnd() {

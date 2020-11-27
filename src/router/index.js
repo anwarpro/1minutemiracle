@@ -16,6 +16,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/GenerateLink.vue')
     },
     {
+        path: '/my-miracles',
+        name: 'Miracles',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/MyMiracles.vue')
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'NotFound',
         component: () => import('../views/NotFound')
