@@ -3,11 +3,7 @@
   <div class="w-full">
 
     <div class="">
-      <!--      <h3 v-if="user" class="mr-1 text-lg text-white mx-2 md:mx-24">Hi, {{ user.displayName ? user.displayName.split(' ')[0] : 'Guest' }}</h3>-->
-
-      <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
-
-      <p v-if="editing" class="md:mx-24 text-red-400 font-bold mx-2">After editing done press enter</p>
+      <p v-if="editing" class="md:mx-24 text-red-400 font-bold mx-2">After editing press enter or click on done</p>
 
       <div
           class="md:my-2 md:mx-24 my-4 mx-2 text-xl editor shadow-lg md:px-12 md:py-6 px-3 py-4 text-white leading-loose"
@@ -16,8 +12,6 @@
           @keydown.enter.prevent="endEdit"
           v-html="motive">
       </div>
-
-      <!--    <h1 class="text-lg font-bold text-gray-300 text-center">...</h1>-->
 
       <div class="flex justify-center mt-3">
         <button @click="toggle"
@@ -34,28 +28,23 @@
           <span class="text-lg font-semibold ml-2">{{ editing ? "Done" : "Edit" }}</span>
         </button>
 
-        <button @click="drawText"
+        <button v-if="!loading" @click="download"
                 class="ml-2 rounded-full py-1 px-4 bg-green-500 shadow text-white hover:bg-green-600 text-center">
           Download
         </button>
       </div>
     </div>
 
-    <div class="mt-4 w-full overflow-x-auto md:flex md:justify-center">
-
-      <div ref="output" class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 w-100">
-        <div class="flex items-center justify-center">
-          <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full"/>
-          <h3 class="text-md font-medium text-gray-800 ml-3" v-if="fireUser">@{{
-              fireUser.name ?? 'Shejadul Karim'
-            }}</h3>
-          <h3 class="text-md font-medium text-gray-800 ml-3" v-else>@Shejadul Karim</h3>
-        </div>
-        <div class="flex-none my-3 text-center">
-          <blockquote class="text-md text-justify font-semibold">{{ stripedhtml }}</blockquote>
-        </div>
+    <div class="mt-4 w-full flex justify-center">
+      <div v-if="loading" class="flex justify-center px-2 py-2">
+        <h3 class="relative">
+            <span
+                class="w-10 h-10 rounded-full absolute border-4 inline-block text-yellow-500 font-bold text-xs flex justify-center items-center">
+            </span>
+          <span class="w-10 h-10 rounded-full absolute border-r-4 border-red-500 inline-block animate-spin"></span>
+        </h3>
       </div>
-
+      <img v-else :src="output" alt="Output" class="w-1/3">
     </div>
 
   </div>
@@ -64,11 +53,10 @@
 
 <script>
 
-// import canvasTxt from 'canvas-txt'
-
-import * as htmlToImage from 'html-to-image';
 import {mapGetters} from "vuex";
 import {postCollection} from "@/firebase";
+import {changeDpiDataUrl} from "changedpi"
+import Jimp from 'jimp';
 
 export default {
   name: 'Miracle',
@@ -78,6 +66,8 @@ export default {
       original: "You're super <b>awesome</b>",
       motive: "You're super <b>awesome</b>",
       face: '',
+      output: '',
+      loading: false
     }
   },
   computed: {
@@ -95,7 +85,10 @@ export default {
   },
   watch: {
     fireUser() {
-      this.getFace(this.fireUser.face)
+      this.getFace(this.fireUser.face === '' ? '/img/pic.78e96f0b.png' : this.fireUser.face)
+    },
+    motive() {
+      this.jimpTest()
     }
   },
   created() {
@@ -104,6 +97,71 @@ export default {
     }
   },
   methods: {
+    distanceFromCenter(rad, x, y) {
+      return Math.hypot(rad - x, rad - y);
+    },
+    async jimpTest() {
+      this.loading = true
+      const font = await Jimp.loadFont(
+          '/fnt/gaugu_32_white.fnt'
+      );
+      const image = await Jimp.read(
+          'https://firebasestorage.googleapis.com/v0/b/minmiracle-ebc7d.appspot.com/o/templates%2Fpt.jpg?alt=media'
+      );
+
+      const profileImage = await Jimp.read(
+          this.gFace
+      );
+
+      await profileImage.resize(80, 80)
+
+
+      const size = 80;
+      const rad = size / 2;
+      const black = 0xFF000000; //[0, 0, 0, 255];
+      const white = 0xFFFFFFFF; //[255, 255, 255, 255];
+
+      const img = new ImageData(size, size);
+      const data = new Uint32Array(img.data.buffer);
+
+      for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+          const dist = this.distanceFromCenter(rad, x, y);
+          let color;
+          if (dist >= rad + 1) color = black;
+          else if (dist <= rad) color = white;
+          else {
+            const mult = (255 - Math.floor((dist - rad) * 255)).toString(16).padStart(2, 0);
+            color = '0xff' + mult.repeat(3); // grayscale 0xffnnnnnn
+          }
+          // image.setPixelColor(color, x, y);
+          data[(y * size) + x] = Number(color);
+        }
+      }
+
+      // eslint-disable-next-line no-unused-vars
+      let mask = new Jimp({data: img.data, width: 80, height: 80}, (err, image) => {
+        // this image is 1280 x 768, pixels are loaded from the given buffer.
+      });
+
+      // mask the image
+
+      await profileImage.mask(mask)
+
+      await image.print(font, 0, 0, {
+        text: this.stripedhtml,
+        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+        alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+      }, image.bitmap.width - 20, image.bitmap.height);
+
+      await image.composite(profileImage, (image.bitmap.width / 2) - 80, 50)
+      await image.print(font, (image.bitmap.width / 2) + 15, 70, '@' + this.fireUser.name !== '' ? this.fireUser.name : 'Seja')
+      // await image.print(font, (image.bitmap.width / 2) + 15, 82, "Author")
+
+      const b64 = await image.getBase64Async(Jimp.AUTO)
+      this.output = changeDpiDataUrl(b64, 144)
+      this.loading = false
+    },
     async getMotive(id) {
       let mot = await postCollection.where('post_id', '==', id).get();
       // let mot = await miraclesCollection.doc(this.user.uid).collection('posts').doc(id).get()
@@ -120,20 +178,8 @@ export default {
       this.toggle()
       this.motive = this.$refs['editor'].innerHTML
     },
-    drawText() {
-      var _this = this
-      htmlToImage.toPng(this.$refs['output'], {
-        pixelRatio: 1
-      }).then(function (dataUrl) {
-        _this.download(dataUrl)
-      })
-          .catch(function (error) {
-            console.error('oops, something went wrong!', error);
-          });
-    },
-
-    download(data) {
-      var filename = this.fireUser.name + '_' + Math.floor(Math.random() * 100) + '.png';
+    download() {
+      var filename = this.fireUser.name + '_' + Math.floor(Math.random() * 100) + '.jpg';
       /// create an "off-screen" anchor tag
       var lnk = document.createElement('a'), e;
 
@@ -143,7 +189,7 @@ export default {
       /// convert canvas content to data-uri for link. When download
       /// attribute is set the content pointed to by link will be
       /// pushed as "download" in HTML5 capable browsers
-      lnk.href = data;
+      lnk.href = this.output;
 
       /// create a "fake" click-event to trigger the download
       if (document.createEvent) {
@@ -157,7 +203,7 @@ export default {
         lnk.fireEvent("onclick");
       }
     },
-    getFace() {
+    getFace(faceUrl) {
       const toDataURL = url => fetch(url)
           .then(response => response.blob())
           .then(blob => new Promise((resolve, reject) => {
@@ -168,14 +214,16 @@ export default {
           }))
 
 
-      toDataURL('https://firebasestorage.googleapis.com/v0/b/minmiracle-ebc7d.appspot.com/o/users%2Ff4678bc2-89e3-4aaa-bf73-3d1c424e94a3.jpg?alt=media&token=5b798118-6c3d-43a9-b21b-0acdcc6f2144')
+      toDataURL(faceUrl)
           .then(dataUrl => {
             this.face = dataUrl
             console.log('data', dataUrl)
+            this.jimpTest()
           })
     },
     toggle() {
       this.editing = !this.editing
+
       var this_ = this;
       this.$refs["editor"].querySelectorAll("b").forEach(node => {
         node.contentEditable = this.editing
