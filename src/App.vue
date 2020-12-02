@@ -50,7 +50,7 @@
         </div>
       </header>
       <section class="flex justify-center flex-1">
-        <login v-if="!user"></login>
+        <login v-if="!user || google"></login>
         <router-view v-else></router-view>
       </section>
     </main>
@@ -72,7 +72,8 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user',
-      fireUser: 'fireUser'
+      fireUser: 'fireUser',
+      google: 'google'
     })
   },
   methods: {

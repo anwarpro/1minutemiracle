@@ -85,7 +85,7 @@ export default {
   },
   watch: {
     fireUser() {
-      this.getFace(this.fireUser.face === '' ? '/img/pic.78e96f0b.png' : this.fireUser.face)
+      this.getFace(this.fireUser && this.fireUser.face !== '' ? this.fireUser.face : '/img/pic.78e96f0b.png')
     },
     motive() {
       this.jimpTest()
@@ -155,7 +155,7 @@ export default {
       }, image.bitmap.width - 20, image.bitmap.height);
 
       await image.composite(profileImage, (image.bitmap.width / 2) - 80, 50)
-      await image.print(font, (image.bitmap.width / 2) + 15, 70, '@' + this.fireUser.name !== '' ? this.fireUser.name : 'Seja')
+      await image.print(font, (image.bitmap.width / 2) + 15, 70, this.fireUser && this.fireUser.name !== '' ? '@' + this.fireUser.name : '@Shajedul Karim')
       // await image.print(font, (image.bitmap.width / 2) + 15, 82, "Author")
 
       const b64 = await image.getBase64Async(Jimp.AUTO)
@@ -217,7 +217,6 @@ export default {
       toDataURL(faceUrl)
           .then(dataUrl => {
             this.face = dataUrl
-            console.log('data', dataUrl)
             this.jimpTest()
           })
     },

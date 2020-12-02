@@ -4,7 +4,8 @@ import {usersCollection} from "@/firebase";
 export default createStore({
     state: {
         user: null,
-        fireUser: null
+        fireUser: null,
+        google: false
     },
     getters: {
         user(state) {
@@ -12,6 +13,9 @@ export default createStore({
         },
         fireUser(state) {
             return state.fireUser
+        },
+        google(state) {
+            return state.google
         }
     },
     mutations: {
@@ -20,20 +24,27 @@ export default createStore({
         },
         SET_FIRE_USER(state, data) {
             state.fireUser = data
+        },
+        SET_GOOGLE(state, data) {
+            state.google = data
         }
     },
     actions: {
         fetchUser({commit}, user) {
             if (!user) {
                 commit('SET_FIRE_USER', null)
+                commit('SET_FIRE_USER', null)
+                return
             }
             commit('SET_USER', user)
         },
         async getUser({commit}, user) {
-            console.log(user.uid)
-            const snap = await usersCollection.doc(user.uid).get()
-            console.log('getUser', snap.data())
-            commit('SET_FIRE_USER', snap.data())
+            if (user) {
+                const snap = await usersCollection.doc(user.uid).get()
+                commit('SET_FIRE_USER', snap.data())
+            } else {
+                commit('SET_FIRE_USER', user)
+            }
         }
     },
     modules: {}
