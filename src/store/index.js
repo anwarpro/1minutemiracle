@@ -33,7 +33,7 @@ export default createStore({
         fetchUser({commit}, user) {
             if (!user) {
                 commit('SET_FIRE_USER', null)
-                commit('SET_FIRE_USER', null)
+                commit('SET_USER', null)
                 return
             }
             commit('SET_USER', user)

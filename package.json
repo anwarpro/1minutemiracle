@@ -9,6 +9,7 @@
     "deploy": "node scripts/deploy-gh-pages.js"
   },
   "dependencies": {
+    "@jimp/plugin-circle": "^0.16.1",
     "autoprefixer": "^9",
     "canvas-txt": "^3.0.0",
     "changedpi": "^1.0.4",

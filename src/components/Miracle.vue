@@ -102,66 +102,80 @@ export default {
     },
     async jimpTest() {
       this.loading = true
-      const font = await Jimp.loadFont(
-          '/fnt/gaugu_32_white.fnt'
+      const font36 = await Jimp.loadFont(
+          '/fnt/poppins_bold_36_gray.ttf.fnt'
       );
+      const font28 = await Jimp.loadFont(
+          '/fnt/poppins_bold_28_black.ttf.fnt'
+      );
+
       const image = await Jimp.read(
-          'https://firebasestorage.googleapis.com/v0/b/minmiracle-ebc7d.appspot.com/o/templates%2Fpt.jpg?alt=media'
+          '/bg/back.png'
       );
 
       const profileImage = await Jimp.read(
           this.gFace
       );
 
-      await profileImage.resize(80, 80)
+      await profileImage.resize(100, 100)
 
+      /*
+            const size = 80;
+            const rad = size / 2;
+            const black = 0xFF000000; //[0, 0, 0, 255];
+            const white = 0xFFFFFFFF; //[255, 255, 255, 255];
 
-      const size = 80;
-      const rad = size / 2;
-      const black = 0xFF000000; //[0, 0, 0, 255];
-      const white = 0xFFFFFFFF; //[255, 255, 255, 255];
+            const img = new ImageData(size, size);
+            const data = new Uint32Array(img.data.buffer);
 
-      const img = new ImageData(size, size);
-      const data = new Uint32Array(img.data.buffer);
-
-      for (let x = 0; x < size; x++) {
-        for (let y = 0; y < size; y++) {
-          const dist = this.distanceFromCenter(rad, x, y);
-          let color;
-          if (dist >= rad + 1) color = black;
-          else if (dist <= rad) color = white;
-          else {
-            const mult = (255 - Math.floor((dist - rad) * 255)).toString(16).padStart(2, 0);
-            color = '0xff' + mult.repeat(3); // grayscale 0xffnnnnnn
-          }
-          // image.setPixelColor(color, x, y);
-          data[(y * size) + x] = Number(color);
-        }
-      }
+            for (let x = 0; x < size; x++) {
+              for (let y = 0; y < size; y++) {
+                const dist = this.distanceFromCenter(rad, x, y);
+                let color;
+                if (dist >= rad + 1) color = black;
+                else if (dist <= rad) color = white;
+                else {
+                  const mult = (255 - Math.floor((dist - rad) * 255)).toString(16).padStart(2, 0);
+                  color = '0xff' + mult.repeat(3); // grayscale 0xffnnnnnn
+                }
+                // image.setPixelColor(color, x, y);
+                data[(y * size) + x] = Number(color);
+              }
+            }*/
 
       // eslint-disable-next-line no-unused-vars
-      let mask = new Jimp({data: img.data, width: 80, height: 80}, (err, image) => {
-        // this image is 1280 x 768, pixels are loaded from the given buffer.
-      });
+      // let mask = new Jimp({data: img.data, width: 80, height: 80}, (err, image) => {
+      //   // this image is 1280 x 768, pixels are loaded from the given buffer.
+      // });
+
+      // let mask = await Jimp.read('/bg/mask.png')
+      // await mask.resize(100, 100)
 
       // mask the image
+      await profileImage.circle()
 
-      await profileImage.mask(mask)
-
-      await image.print(font, 0, 0, {
+      await image.print(font36, 53, 129, {
         text: this.stripedhtml,
         alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
         alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-      }, image.bitmap.width - 20, image.bitmap.height);
+      }, 924, 222);
 
-      await image.composite(profileImage, (image.bitmap.width / 2) - 80, 50)
-      await image.print(font, (image.bitmap.width / 2) + 15, 70, this.fireUser && this.fireUser.name !== '' ? '@' + this.fireUser.name : '@Shajedul Karim')
+      await image.composite(profileImage, 350, 28)
+      await image.print(
+          font28, 466, 28,
+          {
+            text: this.fireUser && this.fireUser.name !== '' ? '@' + this.fireUser.name : '@Shajedul Karim',
+            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT
+          },
+          500, 100)
       // await image.print(font, (image.bitmap.width / 2) + 15, 82, "Author")
 
       const b64 = await image.getBase64Async(Jimp.AUTO)
-      this.output = changeDpiDataUrl(b64, 144)
+      this.output = changeDpiDataUrl(b64, 300)
       this.loading = false
     },
+
     async getMotive(id) {
       let mot = await postCollection.where('post_id', '==', id).get();
       // let mot = await miraclesCollection.doc(this.user.uid).collection('posts').doc(id).get()
@@ -179,7 +193,7 @@ export default {
       this.motive = this.$refs['editor'].innerHTML
     },
     download() {
-      var filename = this.fireUser.name + '_' + Math.floor(Math.random() * 100) + '.jpg';
+      var filename = this.fireUser.name + '_' + Math.floor(Math.random() * 100) + '.png';
       /// create an "off-screen" anchor tag
       var lnk = document.createElement('a'), e;
 
