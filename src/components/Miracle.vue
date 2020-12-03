@@ -44,7 +44,7 @@
           <span class="w-10 h-10 rounded-full absolute border-r-4 border-red-500 inline-block animate-spin"></span>
         </h3>
       </div>
-      <img v-else :src="output" alt="Output" class="w-1/3">
+      <img v-else :src="output" alt="Output" class="md:w-1/3 w-full">
     </div>
 
   </div>
@@ -156,7 +156,7 @@ export default {
 
       await image.print(font36, 53, 129, {
         text: this.stripedhtml,
-        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+        alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT,
         alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
       }, 924, 222);
 
