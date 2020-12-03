@@ -35,8 +35,8 @@
       </div>
     </div>
 
-    <div class="mt-4 w-full flex justify-center">
-      <div v-if="loading" class="flex justify-center px-2 py-2">
+    <div v-if="loading" class="mt-4 w-full flex justify-center">
+      <div class="flex justify-center px-2 py-2">
         <h3 class="relative">
             <span
                 class="w-10 h-10 rounded-full absolute border-4 inline-block text-yellow-500 font-bold text-xs flex justify-center items-center">
@@ -44,7 +44,20 @@
           <span class="w-10 h-10 rounded-full absolute border-r-4 border-red-500 inline-block animate-spin"></span>
         </h3>
       </div>
-      <img v-else :src="output" alt="Output" class="md:w-1/2 w-full">
+      <!--      <img v-else :src="output" alt="Output" class="md:w-1/2 w-full">-->
+    </div>
+
+    <div v-else class="md:mx-64 md:px-16 mx-4 px-0">
+      <div class="flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
+        <div class="flex items-center justify-center">
+          <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
+          <h3 class="text-md font-medium ml-3">
+            @{{ fireUser && fireUser.name !== '' ? fireUser.name : 'Shajedul Karim' }}</h3>
+        </div>
+        <div class="flex-none my-3 text-center">
+          <blockquote class="md:text-lg text-md text-justify font-bold" v-html="motive"></blockquote>
+        </div>
+      </div>
     </div>
 
   </div>
