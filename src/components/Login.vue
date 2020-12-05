@@ -190,7 +190,7 @@ export default {
       password: '',
       type: 'guest',
       error: '',
-      motive: "You're super <b>awesome</b>",
+      motive: "You're super <b>awesome</b>.",
       face: '',
       faceLink: '',
       mime_type: '',

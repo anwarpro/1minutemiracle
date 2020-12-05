@@ -3,7 +3,8 @@
   <div class="w-full">
 
     <div class="">
-      <p v-if="editing" class="md:mx-24 text-red-400 font-bold mx-2">After editing press enter or click on done</p>
+      <p v-if="editing" class="md:mx-24 text-red-400 font-bold mx-2">After editing done, press Enter or click on
+        Done</p>
 
       <div
           class="md:my-2 md:mx-24 my-4 mx-2 text-xl editor shadow-lg md:px-12 md:py-6 px-3 py-4 text-white leading-loose"
@@ -47,15 +48,15 @@
       <!--      <img v-else :src="output" alt="Output" class="md:w-1/2 w-full">-->
     </div>
 
-    <div v-else class="md:mx-64 md:px-16 mx-4 px-0">
-      <div class="flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
+    <div v-else class="flex justify-center mx-4 px-0">
+      <div class="md:w-100 flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
         <div class="flex items-center justify-center">
           <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
           <h3 class="text-md font-medium ml-3">
             @{{ fireUser && fireUser.name !== '' ? fireUser.name : 'Shajedul Karim' }}</h3>
         </div>
         <div class="flex-none my-3 text-center">
-          <blockquote class="md:text-lg text-md text-justify font-bold" v-html="motive"></blockquote>
+          <blockquote class="text-md text-justify font-semibold" v-html="motive"></blockquote>
         </div>
       </div>
     </div>
@@ -76,8 +77,8 @@ export default {
   data() {
     return {
       editing: false,
-      original: "You're super <b>awesome</b>",
-      motive: "You're super <b>awesome</b>",
+      original: "You're super <b>awesome</b>.",
+      motive: "You're super <b>awesome</b>.",
       face: '',
       output: '',
       loading: false
