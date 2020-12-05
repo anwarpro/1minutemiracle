@@ -118,7 +118,7 @@
       <div class="flex flex-col shadow-lg bg-gray-100 py-3 px-12 mt-6 rounded-lg text-gray-500">
         <div class="flex items-center justify-center">
           <img src="../assets/img/pic.png" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
-          <h3 class="text-md font-medium ml-3">@Shejadul Karim</h3>
+          <h3 class="text-md font-medium ml-3">@Shajedul Karim</h3>
         </div>
         <div class="flex-none my-3 text-center">
           <blockquote class="text-md text-justify font-semibold" v-html="motive"></blockquote>
