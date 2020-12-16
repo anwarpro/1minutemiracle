@@ -59,7 +59,7 @@
 
 <script>
 
-import {auth} from "@/firebase";
+import {analytics, auth} from "@/firebase";
 import {mapGetters} from "vuex";
 import Login from "@/components/Login";
 
@@ -67,7 +67,7 @@ export default {
   name: 'App',
   components: {Login},
   created() {
-
+    analytics.logEvent("notification_received")
   },
   computed: {
     ...mapGetters({

@@ -2,6 +2,7 @@ import {firebase} from "@firebase/app";
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
+import 'firebase/analytics'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,6 +20,7 @@ firebase.initializeApp(firebaseConfig)
 
 const auth = firebase.auth()
 const firestore = firebase.firestore()
+const analytics = firebase.analytics()
 
 const usersCollection = firestore.collection('users')
 const miraclesCollection = firestore.collection('miracles')
@@ -37,5 +39,6 @@ export {
     postCollection,
     fieldPath,
     storage,
-    usersStorage
+    usersStorage,
+    analytics
 }
