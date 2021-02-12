@@ -24,7 +24,7 @@ const analytics = firebase.analytics()
 
 const usersCollection = firestore.collection('vusers')
 const miraclesCollection = firestore.collection('vmiracles')
-const postCollection = firestore.collectionGroup('vposts')
+const postCollection = firestore.collectionGroup('posts')
 const googleProvider = new firebase.auth.GoogleAuthProvider()
 const fieldPath = firebase.firestore.FieldPath
 const storage = firebase.storage()

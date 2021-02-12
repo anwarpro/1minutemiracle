@@ -207,8 +207,9 @@ export default {
   },
   computed: {
     stripedhtml() {
+      let keepBr = this.motive.replaceAll("<p><br></p>", "\n")
       let regex = /(<([^>]+)>)/ig;
-      return this.motive.replaceAll(regex, "")
+      return keepBr.replaceAll(regex, "")
     },
     faceLinkUp() {
       console.log("changed", this.faceLink)

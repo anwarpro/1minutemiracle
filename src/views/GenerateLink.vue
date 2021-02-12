@@ -1,10 +1,10 @@
 <template>
   <div class="md:mx-12 md:my-8 mx-2 my-6 w-full px-2 py-2">
-    <textarea class="w-full h-24 px-4 py-2 border border-gray-300 bg-transparent text-white rounded-xl"
-              v-model="text"></textarea>
+
+    <vue-editor v-model="content" class="border border-gray-300 bg-transparent text-white rounded-xl"></vue-editor>
 
     <div class="md:my-2 md:mx-24 my-4 mx-2 text-xl editor shadow md:px-12 md:py-6 px-3 py-4 text-white "
-         v-html="text">
+         v-html="content">
     </div>
 
     <div>
@@ -25,14 +25,18 @@
 <script>
 import {miraclesCollection} from "@/firebase";
 import {mapGetters} from "vuex";
+import {VueEditor} from "vue3-editor";
 
 export default {
   name: "GenerateLink",
+  components: {
+    VueEditor
+  },
   data() {
     return {
-      text: '',
       status: 'Copy',
       miracle: '',
+      content: '<p>You are <strong>awesome</strong>.</p>',
     }
   },
   methods: {
@@ -47,14 +51,14 @@ export default {
       this.status = 'Copied'
     },
     save() {
-      if (this.text.trim() !== '') {
+      if (this.content.trim() !== '') {
         const docRef = miraclesCollection.doc(this.user.uid).collection('posts')
         if (this.miracle) {
           docRef.doc(this.miracle.id)
-              .set({motive: this.text, post_id: this.miracle.id}, {merge: true})
+              .set({motive: this.content, post_id: this.miracle.id}, {merge: true})
         } else {
           docRef.add({
-            motive: this.text.trim()
+            motive: this.content.trim()
           }).then(data => {
             this.miracle = data
             //update post id

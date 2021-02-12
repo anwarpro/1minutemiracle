@@ -77,8 +77,8 @@ export default {
   data() {
     return {
       editing: false,
-      original: "You're super <b>awesome</b>.",
-      motive: "You're super <b>awesome</b>.",
+      original: "You're super <strong>awesome</strong>.",
+      motive: "You're super <strong>awesome</strong>.",
       face: '',
       output: '',
       loading: false
@@ -90,8 +90,11 @@ export default {
       fireUser: 'fireUser'
     }),
     stripedhtml() {
+      let keepBr = this.motive.replaceAll("<p><br></p>", "\n")
       let regex = /(<([^>]+)>)/ig;
-      return this.motive.replaceAll(regex, "")
+      let cleanText = keepBr.replaceAll(regex, "")
+      console.log("cleanText", cleanText)
+      return cleanText
     },
     gFace() {
       return this.face !== '' ? this.face : '/img/pic.78e96f0b.png'
@@ -123,9 +126,30 @@ export default {
           '/fnt/poppins_bold_28_black.ttf.fnt'
       );
 
-      const image = await Jimp.read(
+      let text = this.stripedhtml
+
+      let totalTextHeight = 0;
+
+      let lines = text.split("\n")
+      for (const line of lines) {
+        totalTextHeight = totalTextHeight + await Jimp.measureTextHeight(font36, line, 924);
+      }
+
+      console.log(totalTextHeight)
+
+      const image = await new Jimp(1024, totalTextHeight + 200, 0x0, function (err, image) {
+        // do stuff with image
+        if (err) throw err
+        return image
+      });
+
+      const backgroundImage = await Jimp.read(
           '/bg/back.png'
       );
+
+      await backgroundImage.resize(1024, totalTextHeight + 200 - 2)
+
+      await image.composite(backgroundImage, 0, 1)
 
       const profileImage = await Jimp.read(
           this.gFace
@@ -133,46 +157,22 @@ export default {
 
       await profileImage.resize(100, 100)
 
-      /*
-            const size = 80;
-            const rad = size / 2;
-            const black = 0xFF000000; //[0, 0, 0, 255];
-            const white = 0xFFFFFFFF; //[255, 255, 255, 255];
-
-            const img = new ImageData(size, size);
-            const data = new Uint32Array(img.data.buffer);
-
-            for (let x = 0; x < size; x++) {
-              for (let y = 0; y < size; y++) {
-                const dist = this.distanceFromCenter(rad, x, y);
-                let color;
-                if (dist >= rad + 1) color = black;
-                else if (dist <= rad) color = white;
-                else {
-                  const mult = (255 - Math.floor((dist - rad) * 255)).toString(16).padStart(2, 0);
-                  color = '0xff' + mult.repeat(3); // grayscale 0xffnnnnnn
-                }
-                // image.setPixelColor(color, x, y);
-                data[(y * size) + x] = Number(color);
-              }
-            }*/
-
-      // eslint-disable-next-line no-unused-vars
-      // let mask = new Jimp({data: img.data, width: 80, height: 80}, (err, image) => {
-      //   // this image is 1280 x 768, pixels are loaded from the given buffer.
-      // });
-
-      // let mask = await Jimp.read('/bg/mask.png')
-      // await mask.resize(100, 100)
-
       // mask the image
       await profileImage.circle()
 
-      await image.print(font36, 53, 129, {
-        text: this.stripedhtml,
-        alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT,
-        alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-      }, 924, 222);
+
+      let nextLine = 129
+      for (const line of lines) {
+        await image.print(font36, 53, nextLine, {
+          text: line,
+          alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT,
+          alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+        }, 924, (err, image, {x, y}) => {
+          console.log(x)
+          nextLine = y
+        });
+        console.log("nextLine", nextLine)
+      }
 
       await image.composite(profileImage, 350, 28)
       await image.print(
@@ -252,7 +252,7 @@ export default {
       this.editing = !this.editing
 
       var this_ = this;
-      this.$refs["editor"].querySelectorAll("b").forEach(node => {
+      this.$refs["editor"].querySelectorAll("strong").forEach(node => {
         node.contentEditable = this.editing
         if (this.editing) {
           node.classList.add("bg-transparent")
