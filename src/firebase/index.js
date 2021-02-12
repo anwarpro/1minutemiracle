@@ -22,13 +22,13 @@ const auth = firebase.auth()
 const firestore = firebase.firestore()
 const analytics = firebase.analytics()
 
-const usersCollection = firestore.collection('users')
-const miraclesCollection = firestore.collection('miracles')
-const postCollection = firestore.collectionGroup('posts')
+const usersCollection = firestore.collection('vusers')
+const miraclesCollection = firestore.collection('vmiracles')
+const postCollection = firestore.collectionGroup('vposts')
 const googleProvider = new firebase.auth.GoogleAuthProvider()
 const fieldPath = firebase.firestore.FieldPath
 const storage = firebase.storage()
-const usersStorage = storage.ref('users/')
+const usersStorage = storage.ref('vusers/')
 
 export {
     auth,
