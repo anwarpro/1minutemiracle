@@ -1,9 +1,10 @@
 <template>
   <div
-      class="max-h-screen h-screen overflow-x-hidden bg-gradient-to-r from-gray-start to-gray-end px-3 py-2  md:px-12 md:py-16">
+      class="min-h-screen overflow-x-hidden bg-gradient-to-r from-gray-start to-gray-end px-3 py-2  md:px-12 md:py-16"
+  >
 
     <main
-        class="flex flex-col shadow-2xl bg-red-500 h-full bg-gradient-to-r from-purple-start to-purple-end rounded-xl"
+        class="flex flex-col shadow-2xl bg-red-500 h-full bg-gradient-to-r from-purple-start to-purple-end rounded-xl pb-4"
     >
       <header class="flex flex-col md:flex-row md:py-6 md:px-16 py-2 px-2 justify-between">
         <!--        logo-->
