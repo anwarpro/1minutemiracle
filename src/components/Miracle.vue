@@ -145,7 +145,7 @@ export default {
 
       const image = await new Jimp(1024, totalTextHeight + 200, 0x0, function (err, image) {
         // do stuff with image
-        if (err) throw err
+        console.log(err)
         return image
       });
 
