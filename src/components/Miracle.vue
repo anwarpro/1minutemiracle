@@ -144,7 +144,7 @@ export default {
 
       console.log(totalTextHeight)
 
-      const image = await new Jimp(1024, totalTextHeight + 200, 0x0, function (err, image) {
+      const image = await new Jimp(1064, totalTextHeight + 200, 0x0, function (err, image) {
         // do stuff with image
         if (err) throw err
         return image
@@ -154,11 +154,15 @@ export default {
           '/bg/back.png'
       );
 
-      console.log("back_loaded")
+      const backgroundImageOut = await Jimp.read(
+          '/bg/back-out.png'
+      );
+      await backgroundImageOut.resize(1064, totalTextHeight + 200)
+      await image.composite(backgroundImageOut, 0, 0)
 
-      await backgroundImage.resize(1024, totalTextHeight + 200 - 2)
+      await backgroundImage.resize(1064 - 48, totalTextHeight + 200 - 24)
 
-      await image.composite(backgroundImage, 0, 1)
+      await image.composite(backgroundImage, 24, 12)
 
       const profileImage = await Jimp.read(
           this.gFace
@@ -173,7 +177,7 @@ export default {
 
       console.log("profile circle")
 
-      let nextLine = 129
+      let nextLine = 150
       for (const line of lines) {
 
         if (line === "") {
