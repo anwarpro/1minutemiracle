@@ -49,7 +49,7 @@
     </div>
 
     <div v-else class="flex justify-center mx-4 px-0">
-      <div class="w-full md:mx-16 mx-1 flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
+      <div class="md:w-100 flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
         <div class="flex items-center justify-center">
           <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
           <h3 class="text-md font-medium ml-3">

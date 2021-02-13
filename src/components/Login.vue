@@ -216,7 +216,7 @@ export default {
     },
     faceLinkUp() {
       console.log("changed", this.faceLink)
-      return this.faceLink !== '' ? this.faceLink : '/img/pic.jpg'
+      return this.faceLink !== '' ? this.faceLink : '/bg/pic.jpg'
     },
     ...mapGetters({
       google: 'google',
