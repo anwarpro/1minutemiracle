@@ -329,7 +329,7 @@ export default {
       await usersCollection.doc(user.uid).set({
         name: name,
         face: faceLink
-      })
+      }, {merge: true})
 
       this.$store.dispatch('fetchUser', user)
       this.$store.dispatch('getUser', user)
