@@ -3,7 +3,7 @@
   <div class="w-full">
 
     <div class="">
-      <p v-if="editing" class="md:mx-24 text-red-400 font-bold mx-2">After editing done, press Enter or click on
+      <p v-if="editing" class="md:mx-24 text-yellow-500 font-bold mx-2">After editing done, press Enter or click on
         Done</p>
 
       <div

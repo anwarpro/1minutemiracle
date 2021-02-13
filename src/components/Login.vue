@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="py-10 px-4" v-if="!google">
-      <h3 class="text-2xl font-bold text-white mb-2">Hello!</h3>
+      <h3 class="text-2xl font-bold text-white mb-2">Happy Valentine's Day!</h3>
       <div v-if="type === 'signin'" class="mb-2 flex flex-col">
         <input type="email" placeholder="Email"
                class="bg-gray-600 px-2 py-1 mb-2  rounded-lg text-white inline-block w-full h-10" v-model="email">
@@ -88,7 +88,7 @@
 
       </div>
 
-      <p class="text-red-500">{{ error }}</p>
+      <p class="text-yellow-500">{{ error }}</p>
 
       <div class="text-white flex justify-between mt-4">
         <button class="bg-blue-500 rounded-lg text-white px-2 py-1 mb-2" @click.prevent="guestSignIn">Start as guest
@@ -96,10 +96,10 @@
 
         <div class="">
           <a href="#" :class="{'bg-green-500': type==='signin'}" class="mx-2 border-b rounded-full px-2 py-1"
-             @click.prevent="signIn">Signin</a>
+             @click.prevent="signIn">Sign in</a>
           <span>|</span>
           <a href="#" :class="{'bg-green-500': type==='signup'}" class="mx-2 border-b rounded-full px-2 py-1"
-             @click.prevent="register">Signup</a>
+             @click.prevent="register">Sign up</a>
         </div>
       </div>
 
@@ -108,7 +108,7 @@
       </div>
 
       <div class="text-center">
-        <button class="bg-red-500 rounded-lg text-white px-2 py-1" @click.prevent="signInWithGoogle">Continue with
+        <button class="bg-green-500 rounded-lg text-white px-2 py-1" @click.prevent="signInWithGoogle">Continue with
           Google
         </button>
         <!--      <button class="bg-blue-500 rounded-lg text-white px-2 py-1 ml-2" @click.prevent="signIn">Continue with Facebook
