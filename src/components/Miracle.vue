@@ -49,7 +49,7 @@
     </div>
 
     <div v-else class="flex justify-center mx-4 px-0">
-      <div class="md:w-100 flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
+      <div class="w-full md:mx-16 mx-1 flex flex-col shadow-lg bg-gray-100 py-5 px-12 mt-6 rounded-lg text-gray-500">
         <div class="flex items-center justify-center">
           <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
           <h3 class="text-md font-medium ml-3">
@@ -90,19 +90,21 @@ export default {
       fireUser: 'fireUser'
     }),
     stripedhtml() {
-      let keepBr = this.motive.replaceAll("<p><br></p>", "\n")
+      let keepBr = this.motive.replaceAll("&nbsp;", "")
+      keepBr = keepBr.replaceAll("<p><br></p>", "\n")
+      keepBr = keepBr.replaceAll("</p>", "\n")
       let regex = /(<([^>]+)>)/ig;
       let cleanText = keepBr.replaceAll(regex, "")
       console.log("cleanText", cleanText)
       return cleanText
     },
     gFace() {
-      return this.face !== '' ? this.face : '/img/pic.78e96f0b.png'
+      return this.face !== '' ? this.face : '/img/pic.jpg'
     }
   },
   watch: {
     fireUser() {
-      this.getFace(this.fireUser && this.fireUser.face !== '' ? this.fireUser.face : '/img/pic.78e96f0b.png')
+      this.getFace(this.fireUser && this.fireUser.face !== '' ? this.fireUser.face : '/img/pic.jpg')
     },
     motive() {
       this.jimpTest()
@@ -132,7 +134,11 @@ export default {
 
       let lines = text.split("\n")
       for (const line of lines) {
-        totalTextHeight = totalTextHeight + await Jimp.measureTextHeight(font36, line, 924);
+        if (line === "") {
+          totalTextHeight = totalTextHeight + 20
+        } else {
+          totalTextHeight = totalTextHeight + await Jimp.measureTextHeight(font36, line, 924);
+        }
       }
 
       console.log(totalTextHeight)
@@ -163,6 +169,12 @@ export default {
 
       let nextLine = 129
       for (const line of lines) {
+
+        if (line === "") {
+          nextLine = nextLine + 20
+          continue;
+        }
+
         await image.print(font36, 53, nextLine, {
           text: line,
           alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT,
