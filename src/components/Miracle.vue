@@ -53,7 +53,7 @@
         <div class="flex items-center justify-center">
           <img :src="gFace" alt="Profile pic" class="w-12 h-12 rounded-full border border-gray-300"/>
           <h3 class="text-md font-medium ml-3">
-            @{{ fireUser && fireUser.name !== '' ? fireUser.name : 'Shajedul Karim' }}</h3>
+            @{{ fireUser && fireUser.name !== '' ? fireUser.name : 'Elon Musk' }}</h3>
         </div>
         <div class="flex-none my-3 text-center">
           <blockquote class="text-md text-justify font-semibold" v-html="motive"></blockquote>
@@ -190,7 +190,7 @@ export default {
       await image.print(
           font28, 466, 28,
           {
-            text: this.fireUser && this.fireUser.name !== '' ? '@' + this.fireUser.name : '@Shajedul Karim',
+            text: this.fireUser && this.fireUser.name !== '' ? '@' + this.fireUser.name : '@Elon Musk',
             alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
             alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT
           },
