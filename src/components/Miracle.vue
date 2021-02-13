@@ -99,7 +99,7 @@ export default {
       return cleanText
     },
     gFace() {
-      return this.face !== '' ? this.face : '/bg/pic.jpg'
+      return 'https://firebasestorage.googleapis.com/v0/b/minmiracle-ebc7d.appspot.com/o/vusers%2Fa9c027db-7827-4072-85cc-e9f7292557b7.jpg?alt=media&token=93259344-80a2-4778-9cc6-d6cb0c63ecf3'
     }
   },
   watch: {
