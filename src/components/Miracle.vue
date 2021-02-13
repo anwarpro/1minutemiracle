@@ -161,7 +161,7 @@ export default {
 
       const profileImage = await Jimp.read(
           this.gFace,
-          Jimp.AUTO
+          Jimp.MIME_JPEG
       );
       console.log("face_loaded")
 
