@@ -99,7 +99,7 @@ export default {
       return cleanText
     },
     gFace() {
-      return this.face !== '' ? this.face : '/img/pic.jpg'
+      return this.face !== '' ? this.face : '/bg/pic.jpg'
     }
   },
   watch: {
@@ -160,8 +160,7 @@ export default {
       await image.composite(backgroundImage, 0, 1)
 
       const profileImage = await Jimp.read(
-          this.gFace,
-          Jimp.MIME_JPEG
+          this.gFace
       );
       console.log("face_loaded")
 

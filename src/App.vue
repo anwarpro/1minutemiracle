@@ -10,7 +10,7 @@
         <!--        logo-->
         <div class="flex md:justify-around justify-center items-center">
           <div class="text-white">
-            <img src="./assets/ph_love.png" class="h-16 w-16" alt="logo">
+            <img src="./assets/ph_love.png" class="h-16" alt="logo">
           </div>
           <!--          <div class="ml-1">
                       <h3 class="text-2xl font-semibold text-white">Hero Valentines</h3>
