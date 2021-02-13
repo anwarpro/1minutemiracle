@@ -4,7 +4,7 @@
   >
 
     <main
-        class="flex flex-col shadow-2xl bg-red-500 h-full bg-gradient-to-r from-purple-start to-purple-end rounded-xl pb-4"
+        class="flex flex-col shadow-2xl bg-red-500 h-full bg-gradient-to-r from-purple-start to-purple-end rounded-xl pb-12"
     >
       <header class="flex flex-col md:flex-row md:py-6 md:px-16 py-2 px-2 justify-between">
         <!--        logo-->
